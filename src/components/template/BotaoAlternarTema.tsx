@@ -21,11 +21,11 @@ export default function BotaoAlternarTema(props: BotaoAlternarTemaProps) {
             bg-white text-yellow-600 w-6 h-6 rounded-full
             `}
       >
-        {IconeSol(4)}
+        {IconeSol()}
       </div>
       <div
         className={`
-            hiddem lg:flex items-center ml-4 text-white
+            hidden lg:flex items-center ml-4 text-white
             `}
       >
         <span className="text-sm">Claro</span>
@@ -42,7 +42,7 @@ export default function BotaoAlternarTema(props: BotaoAlternarTemaProps) {
     >
       <div
         className={`
-            hiddem lg:flex items-center mr-2
+            hidden lg:flex items-center mr-2
             text-gray-300
             `}
       >
@@ -54,7 +54,7 @@ export default function BotaoAlternarTema(props: BotaoAlternarTemaProps) {
             bg-black text-yellow-300 w-6 h-6 rounded-full
             `}
       >
-        {IconeLua(4)}
+        {IconeLua()}
       </div>
     </div>
   );
