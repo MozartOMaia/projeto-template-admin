@@ -5,7 +5,7 @@ import firebase from "../../firebase/config";
 import Usuario from "@/model/Usuario";
 
 interface AuthContextProps {
-  usuario?: Usuario;
+  usuario?: Usuario | null;
   carregando?: boolean;
   cadastrar?: (email: string, senha: string) => Promise<void>;
   login?: (email: string, senha: string) => Promise<void>;
@@ -42,7 +42,7 @@ function gerenciarCookies(logado: string) {
 
 export function AuthProvider(props: any) {
   const [carregando, setCarregando] = useState(true);
-  const [usuario, setUsuario] = useState<Usuario>({
+  const [usuario, setUsuario] = useState<Usuario | null>({
     email: "",
     imagemUrl: "",
     nome: "",
@@ -51,7 +51,7 @@ export function AuthProvider(props: any) {
     uid: "",
   });
 
-  async function configurarSessao(usuarioFirebase: firebase.User) {
+  async function configurarSessao(usuarioFirebase: firebase.User | null) {
     if (usuarioFirebase?.email) {
       const usuario = await usuarioNormalizado(usuarioFirebase);
       setUsuario(usuario);
@@ -65,7 +65,7 @@ export function AuthProvider(props: any) {
       return false;
     }
   }
-  async function login(email, senha) {
+  async function login(email: string, senha: string) {
     try {
       setCarregando(true);
       const resp = await firebase
@@ -79,7 +79,7 @@ export function AuthProvider(props: any) {
     }
   }
 
-  async function cadastrar(email, senha) {
+  async function cadastrar(email: string, senha: string) {
     try {
       setCarregando(true);
       const resp = await firebase
