@@ -9,6 +9,10 @@ export default class Client {
     this.#id = id;
   }
 
+  static vazio() {
+    return new Client("", 0);
+  }
+
   get id() {
     return this.#id;
   }
