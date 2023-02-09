@@ -5,7 +5,7 @@ export default function Notificacoes() {
   const [urlForm, setUrlForm] = useState("");
   const [srcImage, setSrcImage] = useState("");
   const [name, setName] = useState("");
-  const [pesquisa, setPesquisa] = useState("ditto");
+  const [pesquisa, setPesquisa] = useState("pikachu");
   const [inputTxt, setInput] = useState("");
 
   useEffect(() => {
@@ -39,17 +39,17 @@ export default function Notificacoes() {
         subtitulo="Aqui você irá gerenciar suas notificações"
       ></Layout>
 
-      <div>
+      <div className="mt-2 mb-2 ml-5 w-50">
         <input
           onChange={(e) => setInput(e.target.value)}
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
            focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700
             dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           value={inputTxt}
-          placeholder="ditto"
+          placeholder="pikachu"
         />
         <img src={srcImage}></img>
-        <p>{name}</p>
+        <p className="">{name}</p>
         {/* <h1>Contador: {contador} </h1>
         <button
           onClick={() => setContador(contador * 2)}
