@@ -1,32 +1,54 @@
 import Layout from "@/components/template/Layout";
-import Client from "@/core/Cliente";
+// import Client from "@/core/Cliente";
 import Tabela from "@/components/Tabela";
 import Botao from "@/components/template/Botao";
+import Formulario from "@/components/template/Formulario";
+// import { useEffect, useState } from "react";
+// import ClienteRepositorio from "@/core/ClienteRepositorio";
+// import ColecaoCliente from "@/backend/db/ColecaoCliente";
+import useClientes from "@/data/hook/useClientes";
 
 export default function Cliente() {
-  const clientes = [
-    new Client("Ana", 34, "1"),
-    new Client("Bia", 26, "2"),
-    new Client("Carlos", 16, "3"),
-    new Client("Pedro", 34, "4"),
-  ];
-
-  function clienteSelecionado(cliente: Client) {
-    console.log(cliente);
-  }
-
-  function clienteExcluido(cliente: Client) {
-    console.log("excluindo", cliente.nome);
-  }
+  const {
+    cliente,
+    clientes,
+    excluirCliente,
+    selecionarCliente,
+    salvarCliente,
+    novoCliente,
+    tabelaVisivel,
+    exibirTabela,
+  } = useClientes();
 
   return (
     <Layout titulo="Cadastro simples" subtitulo="">
-      <Botao>Novo Cliente</Botao>
-      <Tabela
-        clientes={clientes}
-        clientSelecionado={clienteSelecionado}
-        clientExcluido={clienteExcluido}
-      ></Tabela>
+      {tabelaVisivel ? (
+        <>
+          <div className="flex justify-start">
+            <Botao
+              onClick={novoCliente}
+              type="button"
+              cor="blue"
+              className="w-1/4 mb-2"
+            >
+              Novo Cliente
+            </Botao>
+          </div>
+          <Tabela
+            clientes={clientes}
+            clientSelecionado={selecionarCliente}
+            clientExcluido={excluirCliente}
+          ></Tabela>
+        </>
+      ) : (
+        <Formulario
+          cliente={cliente}
+          clientMudou={salvarCliente}
+          cancelado={() => {
+            exibirTabela();
+          }}
+        ></Formulario>
+      )}
     </Layout>
   );
 }

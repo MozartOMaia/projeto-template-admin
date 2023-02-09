@@ -1,7 +1,7 @@
 import Botao from "@/components/template/Botao";
 import Layout from "@/components/template/Layout";
 import useAuth from "@/data/hook/useAuth";
-// import { collection } from "firebase/firestore";
+import firebase from "@/firebase/config";
 import { useEffect, useState } from "react";
 
 export default function Perfil() {
@@ -16,10 +16,85 @@ export default function Perfil() {
     setImagem(usuario?.imagemUrl);
   }, [usuario]);
 
-  const submit = (e: any) => {
+  const submit = async (e: any) => {
     e.preventDefault();
-    // const usersCollectionRef = firestore
+
+    const query = firebase
+      .firestore()
+      .collection("users")
+      .where("user_id", "==", usuario?.uid);
+
+    query
+      .get()
+      .then((querySnapshot) => {
+        if (querySnapshot.empty) {
+          firebase.firestore().collection("users").add({
+            nome,
+            email,
+            user_id: usuario?.uid,
+            imagem,
+          });
+        } else {
+          const docRef = querySnapshot.docs[0].ref;
+
+          docRef
+            .get()
+            .then((doc) => {
+              if (doc.exists) {
+                console.log("Documento encontrado:", doc.data());
+
+                // Atualize o documento
+                docRef.update({
+                  nome,
+                  email,
+                  imagem,
+                });
+              } else {
+                console.log("Documento não encontrado");
+              }
+            })
+            .catch((error) => {
+              console.error("Erro ao buscar o documento:", error);
+            });
+        }
+      })
+      .catch((error) => {
+        console.error("Erro ao executar a query:", error);
+      });
   };
+
+  //   querySnapshot.forEach(async (doc) => {
+  //     const documento = firebase
+  //       .firestore()
+  //       .collection("users")
+  //       .doc(doc.id);
+  //     console.log(doc.data());
+  //     if (doc.data()) {
+  //       await documento.set({ nome, email, imagem, user_id: usuario?.uid });
+  //     } else {
+  //       await firebase
+  //         .firestore()
+  //         .collection("users")
+  //         .add({ nome, email, imagem, user_id: usuario?.uid });
+  //     }
+  //     // doc.data() is never undefined for query doc snapshots
+  //     console.log(doc.id, " => ", doc.data());
+  //   });
+  // })
+  // .catch((error) => {
+  //   console.log("Error getting documents: ", error);
+  // });
+
+  // const collectionRef = await firebase.firestore().collection("users");
+  // const query = await collectionRef
+  //   .where("user_id", "==", usuario?.uid)
+  //   .get();
+  // // console.log(query);
+  // await firebase
+  //   .firestore()
+  //   .collection("users")
+  //   .add({ nome, email, imagem, user_id: usuario?.uid });
+  // };
 
   return (
     <Layout
@@ -27,7 +102,7 @@ export default function Perfil() {
       subtitulo="Administre as suas informações de usuário"
     >
       <div className="flex items-center justify-center">
-        <form className=" rounded px-8 pt-6 pb-8 mb-4 w-1/3">
+        <form onSubmit={submit} className=" rounded px-8 pt-6 pb-8 mb-4 w-1/3">
           <div className="flex flex-col">
             <label className="mb-1"> Nome </label>
             <input
@@ -48,7 +123,7 @@ export default function Perfil() {
               value={imagem}
             />
             <div className="flex justify-end">
-              <Botao>Salvar</Botao>
+              <Botao type="submit">Salvar</Botao>
             </div>
           </div>
         </form>
