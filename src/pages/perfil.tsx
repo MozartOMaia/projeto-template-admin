@@ -3,12 +3,14 @@ import Layout from "@/components/template/Layout";
 import useAuth from "@/data/hook/useAuth";
 import firebase from "@/firebase/config";
 import { useEffect, useState } from "react";
+import { storage } from "@/firebase/config";
 
 export default function Perfil() {
   const { usuario } = useAuth();
   const [nome, setNome] = useState<string | undefined>("");
   const [email, setEmail] = useState<string | undefined>("");
-  const [imagem, setImagem] = useState<string | undefined>("");
+  const [imagem, setImagem] = useState<any>({});
+  const [tipoImg, settipoImg] = useState<string>("");
   // console.log(usuario);
   useEffect(() => {
     setEmail(usuario?.email);
@@ -18,6 +20,25 @@ export default function Perfil() {
 
   const submit = async (e: any) => {
     e.preventDefault();
+
+    if (imagem) {
+      console.log(tipoImg);
+      const ref = firebase.storage().ref(`users/${usuario?.uid}`);
+      ref
+        .child(`avatar.png`)
+        .put(imagem)
+        .then((snapshot) => {
+          console.log("snapshot", snapshot);
+          ref
+            .child(`avatar.png`)
+            .getDownloadURL()
+            .then((url) => {
+              console.log("string para downloadl", url);
+            });
+        });
+    } else {
+      console.warn("Arquivo não encontrado!");
+    }
 
     const query = firebase
       .firestore()
@@ -32,7 +53,6 @@ export default function Perfil() {
             nome,
             email,
             user_id: usuario?.uid,
-            imagem,
           });
         } else {
           const docRef = querySnapshot.docs[0].ref;
@@ -118,9 +138,21 @@ export default function Perfil() {
             />
             <label className="mb-1"> Imagem </label>
             <input
-              onChange={(e) => setImagem(e.target.value)}
+              type="file"
+              onChange={(e) => {
+                const files = e.target.files;
+                if (files) {
+                  setImagem(files[0]);
+                  console.log("File:", files[0]);
+                  console.log("Imagem:", imagem);
+                  const { type } = files[0];
+                  settipoImg(type.slice(6));
+                  console.log(tipoImg);
+                } else {
+                  console.log("arquivo não escolhido");
+                }
+              }}
               className="text-blue-900 bg-gray-200 mb-2 p-2 rounded-md"
-              value={imagem}
             />
             <div className="flex justify-end">
               <Botao type="submit">Salvar</Botao>

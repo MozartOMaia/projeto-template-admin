@@ -16,3 +16,26 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.bubble {
+height: max(300px, 30vw);
+width: max(300px, 30vw);
+background-color:#054acc;
+border-radius: 100%;
+position: absolute;
+left: 50%;
+top: 99%;
+
+animation: wave 2s ease-in-out infinite;
+}
+
+@keyframes wave {
+  from, to {
+    transform: translate(-50%, 0%);
+  }
+
+  50% {
+    transform: translate(-50%, -20%);
+  }
+  
+}
