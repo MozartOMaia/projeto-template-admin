@@ -2,7 +2,7 @@ import { IconeSol, IconeLua } from "../icons";
 
 interface BotaoAlternarTemaProps {
   tema: string | undefined;
-  alternarTema: () => void;
+  alternarTema: any;
 }
 
 export default function BotaoAlternarTema(props: BotaoAlternarTemaProps) {
