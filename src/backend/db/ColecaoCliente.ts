@@ -19,14 +19,17 @@ export default class ColecaoCliente implements ClienteRepositorio {
     },
   };
 
-  async salvar(cliente: Client): Promise<Client> {
+  async salvar(cliente: Client): Promise<Client | undefined> {
     if (cliente?.id) {
       this.colecao().doc(cliente.id).set(cliente);
       return cliente;
     } else {
       const docRef = await this.colecao().add(cliente);
       const doc = await docRef.get();
-      return doc.data();
+      if (doc) {
+        return doc.data();
+      }
+      return Client.vazio();
     }
   }
   async excluir(cliente: Client): Promise<void> {
