@@ -12,7 +12,7 @@ interface AppContextProps {
 const AppContext = createContext<AppContextProps>({});
 
 export function AppProvider(props: any) {
-  const [tema, setTema] = useState<string | null>("dark");
+  const [tema, setTema] = useState<any>("dark");
 
   function alternarTema() {
     const novoTema = tema === "" ? "dark" : "";
