@@ -3,7 +3,7 @@ import { createContext, useEffect, useState } from "react";
 // type Tema = "dark" | "";
 
 interface AppContextProps {
-  tema?: any;
+  tema?: string | undefined | null;
   alternarTema?: () => void;
 }
 //como as propriedades são opcionais é possível criar
